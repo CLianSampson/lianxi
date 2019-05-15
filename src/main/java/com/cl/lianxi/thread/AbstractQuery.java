@@ -107,24 +107,6 @@ public class AbstractQuery  {
 
             System.out.println("response header: "  + response.headers().toString());
 
-//            String jsonstr = new String(Base64.decode(response.body().getBytes(), Base64.URL_SAFE));
-
-
-            //此处只能调用一次
-            String baseStr = response.body().string();
-
-
-//            System.out.println("onResponse: " + base);
-
-
-            Pattern p = Pattern.compile("\\((.*?)\\)");//正则表达式，取=和|之间的字符串，不包括=和|
-//        基础数据成功率：(.*?)%
-            Matcher m = p.matcher(baseStr);
-            while(m.find()) {
-                System.out.println(m.group(1));//m.group(1)不包括这两个字符
-
-            }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
