@@ -9,10 +9,7 @@ import sun.jvm.hotspot.memory.HeapBlock;
 import sun.misc.BASE64Decoder;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -130,7 +127,7 @@ public class CaptchImage64 extends AbstractQuery {
         System.out.println("jsonObject is :");
         System.out.println(jsonObject);
 
-        if (jsonObject.get("result_code").equals("5")){
+        if (!jsonObject.get("result_code").equals("4")){
             System.out.println("验证码校验错误，需要重新请求");
             System.out.println(jsonObject.get("result_message"));
 
@@ -149,21 +146,18 @@ public class CaptchImage64 extends AbstractQuery {
         String url = UrlConfig.webLogin;
 
 
-//        JSONObject params = new JSONObject();
-//        params.put("username","cl448169133");
-//        params.put("password","Cl448169133");
-//        params.put("appid","otn");
-//        params.put("answer",answer);
+        HashMap<String,String> params = new HashMap<>();
+        params.put("username","cl448169133");
+        params.put("password","Cl448169133");
+        params.put("appid","otn");
+        params.put("answer",answer);
 
 
         //此处 answer 顺序不一样
+//        Request request = initHttpPost(url,params);
         Request request = initHttpPost(url,answer);
 
 
-        System.out.println("登陆强求头 : ");
-        System.out.println(request.headers());
-        System.out.println("登陆 body : ");
-        System.out.println(request.body().toString());
 
         Response response = httpPost(request);
 
@@ -179,10 +173,8 @@ public class CaptchImage64 extends AbstractQuery {
         System.out.println(responsestr);
 
 
-        String jsonStr = getJsonFromJsonp(responsestr);
-
-
-        JSONObject jsonObject = JSON.parseObject(jsonStr);
+        //此处直接返回josn
+        JSONObject jsonObject = JSON.parseObject(responsestr);
         System.out.println("jsonObject is :");
         System.out.println(jsonObject);
 
@@ -304,8 +296,6 @@ public class CaptchImage64 extends AbstractQuery {
         List<Integer> xArry = new ArrayList<>(count);
         List<Integer> yArry = new ArrayList<>(count);
 
-
-
         for (int i = 0; i < count; i++) {
             switch (Integer.parseInt(select[i])){
                 case 1 :
@@ -349,15 +339,14 @@ public class CaptchImage64 extends AbstractQuery {
         String answer = "";
         for (int i = 0; i < count; i++) {
             answer = answer + xArry.get(i) + ",";
-        }
 
-        for (int i = 0; i < count; i++) {
             if (i == count-1){
                 answer = answer + yArry.get(i);
             }else {
                 answer = answer + yArry.get(i) + ",";
             }
         }
+
 
         System.out.println("answer is :");
         System.out.println(answer);
